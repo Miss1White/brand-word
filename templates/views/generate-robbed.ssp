@@ -1,0 +1,142 @@
+<%@ val appId : String = "" %>
+<%@ val appData : Map[String, Any] = Map.empty %>
+<%@ val grabAppSize : Int = 0 %>
+<%@ val grabAppData : List[Map[String, Any]] = List.empty %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>品牌词大作战:${appData.getOrElse("keyword", "")}-自己的品牌词</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=0">
+	<link rel="stylesheet" type="text/css" href="css/generate.css">
+	<script src="http://cdn.coolguang.com/public/web/js/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="title"><img src="./images/title.png"></div>
+		<div class="content">
+			<div class="content-top">
+				<% 
+					val topDays = appData.getOrElse("topDays", 0).asInstanceOf[Int]
+					val notTopDays = appData.getOrElse("notTopDays", 0).asInstanceOf[Int]
+					val rate = appData.getOrElse("rate", 0.0).asInstanceOf[Double]
+				%>
+				<!-- 有相关app的头部 -->
+				#if(topDays > 15)
+				<div class="result-title moddle">
+					<div class="result-icon has-crow">
+						<img src="${appData.getOrElse("icon", "")}">
+						<img class="icon-img" src="./images/title-border.png">
+					</div>
+					<h2>搜"<span class="search-name">${appData.getOrElse("keyword", "-")}</span>"排名第一</h2>
+				</div>
+				#else
+				<!-- 没有相关app的头部 -->
+				<div class="result-title moddle">
+					<div class="result-icon drop-crow">
+						<img src="./images/test.png">
+						<img class="icon-img" src="${appData.getOrElse("icon", "")}">
+					</div>
+					<h2>搜"<span class="search-name">${appData.getOrElse("keyword", "-")}</span>"<span class="result-name">野蛮人野蛮人</span>排第一</h2>
+				</div>
+				#end
+
+				<div class="compare moddle">
+					#if(grabAppSize == 0)
+					<h2>家门口的野蛮人 全部被击毙</h2>
+					#else
+					<h2>家门口的野蛮人  Top3</h2>
+					#end
+					<div class="scoreWrap">
+	                    <div class="back-score" style="width:${rate}%"></div>
+	                    <!-- 如果进度条在15%~80%之间 -->
+	                    #if(rate > 15 && rate < 80)
+	                    	<label class="compare-label lable-left">${topDays}天</label>
+	                    	<label class="compare-label lable-right">${notTopDays}天被抢</label>
+	                    <!-- 否则 -->
+	                    #else
+	                    	<label class="compare-label lable-left" style="top:48px;">${topDays}天</label>
+	                    	<label class="compare-label lable-right" style="top:48px;">${notTopDays}天被抢</label>
+	                    #end
+	                    <img class="top-score" src="./images/compare-bar-red.png"/>
+	                </div>
+				</div>
+			</div>
+			
+			<div class="content-middle">
+				<div class="rank moddle">
+					<h2>家门口的野蛮人  Top3</h2>
+					#if(!grabAppData.isEmpty)
+					#for(grabApp <- grabAppData.slice(0, 3))
+					#if(!grabApp.isEmpty)
+						<div class="rank-list">
+							<div class="rank-list-title">
+								<img src="${grabApp.getOrElse("icon", "")}" title="${grabApp.getOrElse("title", "")}">
+							</div>
+		                    <span class="rank-list-name">${grabApp.getOrElse("title", "")}</span>
+							<ul class="rank-bar">
+								<li class="rank-bar-top rank-bar-top1" style="width:${grabApp.getOrElse("rate", 0).asInstanceOf[Double]}%;"></li>
+								<li class="rank-bar-bottom"></li>
+							</ul>
+							<span>${grabApp.getOrElse("topDays", "0")}天</span>
+		                </div>
+	                #end
+					#if(grabApp.isEmpty)
+						<div class="rank-list">
+		                	<div class="rank-list-title">
+								<img class="rank-list-title" src="./images/place-notop.png" />
+							</div>
+							<span class="rank-list-name"></span>
+							<ul class="rank-bar">
+								<li class="rank-bar-bottom"></li>
+							</ul>
+		                    <span>0天</span>
+		                </div>
+					#end
+					#end
+					#else
+					<div class="rank-list">
+	                	<div class="rank-list-title">
+							<img class="rank-list-title" src="./images/place-notop.png" />
+						</div>
+						<span class="rank-list-name"></span>
+						<ul class="rank-bar">
+							<li class="rank-bar-bottom"></li>
+						</ul>
+	                    <span>0天</span>
+	                </div>
+	                <div class="rank-list">
+	                	<div class="rank-list-title">
+							<img class="rank-list-title" src="./images/place-notop.png" />
+						</div>
+						<span class="rank-list-name"></span>
+						<ul class="rank-bar">
+							<li class="rank-bar-bottom"></li>
+						</ul>
+	                    <span>0天</span>
+	                </div>
+	                <div class="rank-list">
+	                	<div class="rank-list-title">
+							<img class="rank-list-title" src="./images/place-notop.png" />
+						</div>
+						<span class="rank-list-name"></span>
+						<ul class="rank-bar">
+							<li class="rank-bar-bottom"></li>
+						</ul>
+	                    <span>0天</span>
+	                </div>
+					#end
+				</div>
+
+				<div class="generate-bottom moddle">
+					<span>扫码保护品牌词</span>
+					<img src="./images/erweima-grab.png">
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</body>
+
+</html>

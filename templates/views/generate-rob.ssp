@@ -1,0 +1,126 @@
+<%@ val appId : String = "" %>
+<%@ val appData : Map[String, Any] = Map.empty %>
+<%@ val beGrabAppData : List[Map[String, Any]] = List.empty %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>品牌词大作战:${appData.getOrElse("keyword", "")}-抢了谁的品牌词</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=0">
+	<link rel="stylesheet" type="text/css" href="css/generate.css">
+	<script src="http://cdn.coolguang.com/public/web/js/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="title"><img src="./images/title.png"></div>
+		<div class="content">
+			<div class="content-top">
+				<div class="result-title moddle">
+					<% 
+						val grabNum = appData.getOrElse("grabKeywordNum", "0").toString
+						val flag = if("0".equals(grabNum)) false else true
+						val huangguan = if(flag) "has-crow" else ""
+					%>
+					<div class="result-icon ${huangguan}">
+						<img src="${appData.getOrElse("icon", "")}">
+						<img class="icon-img" src="./images/title-border.png">
+					</div>
+					<div class="result-title-rob">
+						<span>过去30天</span><br>
+						<img src="./images/rob-title-lable.png">
+						<h2 class="rob-title-lable">共抢占了<span>${appData.getOrElse("grabKeywordNum", "0")}</span>个品牌词</h2>
+					</div>
+					<!-- 有抢占品牌词的情况 -->
+					#if(flag)
+					<div class="rob-has-result" style="margin-top:25px;">
+						<img src="./images/has-result.png">
+					</div>
+					#else
+					<!-- 有抢占品牌词的情况 -->
+					<div class="rob-no-result" style="margin-top:25px;">
+						<img src="./images/no-result.png">
+					</div>
+					#end
+				</div>
+			</div>
+			
+			<div class="content-middle">
+
+				<div class="rank moddle">
+					<h2>抢占  Top3</h2>
+					<!-- 有抢占品牌词的情况 -->
+					#if(!beGrabAppData.isEmpty)
+					#for(beGrabApp <- beGrabAppData.slice(0, 3))
+						#if(!beGrabApp.isEmpty)
+						<div class="rank-list">
+							<div class="rank-list-title">
+								<img src="${beGrabApp.getOrElse("icon", "")}" title="${beGrabApp.getOrElse("title", "")}">
+							</div>
+		                    <span class="rank-list-name">${beGrabApp.getOrElse("title", "")}</span>
+							<ul class="rank-bar">
+								<li class="rank-bar-top" style="width:${beGrabApp.getOrElse("rate", 0).asInstanceOf[Double]}%;"></li>
+								<li class="rank-bar-bottom"></li>
+							</ul>
+							<span>${beGrabApp.getOrElse("beGrabDays", "0")}天</span>
+		                </div>
+		                #end
+						#if(beGrabApp.isEmpty)
+						<div class="rank-list">
+		                	<div class="rank-list-title">
+								<img class="rank-list-title" src="./images/place-notop.png" />
+								</div>
+								<span class="rank-list-name"></span>
+								<ul class="rank-bar">
+									<li class="rank-bar-bottom"></li>
+								</ul>
+			                    <span>0天</span>
+			                </div>
+						#end
+	                #end
+	                #else
+	                <!-- 没有抢占品牌词的情况 -->
+	                <div class="rank-list">
+	                	<div class="rank-list-title">
+							<img class="rank-list-title" src="./images/place-notop.png" />
+						</div>
+						<span class="rank-list-name"></span>
+						<ul class="rank-bar">
+							<li class="rank-bar-bottom"></li>
+						</ul>
+	                    <span>0天</span>
+	                </div>
+	                <div class="rank-list">
+	                	<div class="rank-list-title">
+							<img class="rank-list-title" src="./images/place-notop.png" />
+						</div>
+						<span class="rank-list-name"></span>
+						<ul class="rank-bar">
+							<li class="rank-bar-bottom"></li>
+						</ul>
+	                    <span>0天</span>
+	                </div>
+	                <div class="rank-list">
+	                	<div class="rank-list-title">
+							<img class="rank-list-title" src="./images/place-notop.png" />
+						</div>
+						<span class="rank-list-name"></span>
+						<ul class="rank-bar">
+							<li class="rank-bar-bottom"></li>
+						</ul>
+	                    <span>0天</span>
+	                </div>
+	                #end
+				</div>
+
+				<div class="generate-bottom moddle">
+					<span>扫码保护品牌词</span>
+					<img src="./images/erweima-begrab.png">
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</body>
+
+</html>
